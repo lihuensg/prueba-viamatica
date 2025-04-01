@@ -3,7 +3,7 @@ import { sequelize } from '../database/database.js';
 
 export const Persona = sequelize.define('Persona', {
     idPersona: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },

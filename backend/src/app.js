@@ -10,12 +10,13 @@ import rolUsuariosRoutes from "./routes/rolUsuariosRouter.js";
 
 const app = express();
 
-app.use(personRoutes);
-app.use(userRoutes);
-app.use(rolOpcionesRoutes);
-app.use(rolRoutes);
-app.use(sessionsRouter);
-app.use(rolUsuariosRoutes);
+// Definir prefijos para las rutas
+app.use("/persona", personRoutes);
+app.use("/usuario", userRoutes);
+app.use("/rol-opciones", rolOpcionesRoutes);
+app.use("/rol", rolRoutes);
+app.use("/session", sessionsRouter);
+app.use("/rol-usuarios", rolUsuariosRoutes);
 
 
 // Configurar Swagger

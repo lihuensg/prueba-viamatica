@@ -5,12 +5,10 @@ export const crearPersona = async (req, res) => {
   try {
     const { Nombres, Apellidos, Identificacion, FechaNacimiento } = req.body;
 
-    // Validación de identificación
+    // Validaciones
     if (!validarIdentificacion(Identificacion)) {
       return res.status(400).json({ error: 'Identificación no válida. Debe tener 10 caracteres.' });
     }
-
-    // Validación de fecha de nacimiento
     if (!validarFechaNacimiento(FechaNacimiento)) {
       return res.status(400).json({ error: 'Fecha de nacimiento no válida.' });
     }
@@ -20,100 +18,73 @@ export const crearPersona = async (req, res) => {
       Apellidos,
       Identificacion,
       FechaNacimiento,
+      isDeleted: false,
     });
 
     res.status(201).json(persona);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
 export const obtenerPersonas = async (req, res) => {
   try {
-    const personas = await Persona.findAll({
-      where: {
-        isDeleted: false, // Filtramos las personas no eliminadas
-      }
-    });
+    const personas = await Persona.findAll({ where: { isDeleted: false } });
     res.status(200).json(personas);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
 export const obtenerPersonaPorId = async (req, res) => {
-  const { id } = req.params;
   try {
-    const persona = await Persona.findByPk(id, {
-      where: {
-        isDeleted: false, // Aseguramos que no se devuelvan personas eliminadas
-      }
-    });
-    if (!persona) {
-      return res.status(404).json({ error: 'Persona no encontrada' });
-    }
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
+
+    const persona = await Persona.findOne({ where: { idPersona: id, isDeleted: false } });
+    if (!persona) return res.status(404).json({ error: 'Persona no encontrada' });
+
     res.status(200).json(persona);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
 export const actualizarPersona = async (req, res) => {
-  const { id } = req.params;
-  const { Nombres, Apellidos, Identificacion, FechaNacimiento } = req.body;
-
   try {
-    const persona = await Persona.findByPk(id, {
-      where: {
-        isDeleted: false, // Aseguramos que no se actualicen personas eliminadas
-      }
-    });
-    if (!persona) {
-      return res.status(404).json({ error: 'Persona no encontrada' });
-    }
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
 
-    // Validaciones
+    const persona = await Persona.findOne({ where: { idPersona: id, isDeleted: false } });
+    if (!persona) return res.status(404).json({ error: 'Persona no encontrada' });
+
+    const { Nombres, Apellidos, Identificacion, FechaNacimiento } = req.body;
+    
     if (!validarIdentificacion(Identificacion)) {
       return res.status(400).json({ error: 'Identificación no válida.' });
     }
-
     if (!validarFechaNacimiento(FechaNacimiento)) {
       return res.status(400).json({ error: 'Fecha de nacimiento no válida.' });
     }
 
-    await persona.update({
-      Nombres,
-      Apellidos,
-      Identificacion,
-      FechaNacimiento,
-    });
-
+    await persona.update({ Nombres, Apellidos, Identificacion, FechaNacimiento });
     res.status(200).json(persona);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
 export const eliminarPersona = async (req, res) => {
-  const { id } = req.params;
   try {
-    const persona = await Persona.findByPk(id, {
-      where: {
-        isDeleted: false, // Solo eliminamos personas activas
-      }
-    });
-    if (!persona) {
-      return res.status(404).json({ error: 'Persona no encontrada' });
-    }
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
 
-    // Marcar la persona como eliminada lógicamente
-    persona.isDeleted = true;
-    await persona.save();
+    const persona = await Persona.findOne({ where: { idPersona: id, isDeleted: false } });
+    if (!persona) return res.status(404).json({ error: 'Persona no encontrada' });
 
+    await persona.update({ isDeleted: true });
     res.status(200).json({ message: 'Persona eliminada correctamente' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-
- 
