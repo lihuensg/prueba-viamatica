@@ -239,15 +239,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "nombre": {
-                  "example": "any"
-                },
-                "apellido": {
-                  "example": "any"
-                },
-                "identificacion": {
-                  "example": "any"
-                },
                 "email": {
                   "example": "any"
                 },
@@ -255,9 +246,6 @@
                   "example": "any"
                 },
                 "password": {
-                  "example": "any"
-                },
-                "status": {
                   "example": "any"
                 }
               }

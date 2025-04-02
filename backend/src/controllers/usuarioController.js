@@ -98,46 +98,51 @@ export const obtenerUsuarioPorId = async (req, res) => {
 
 export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
-  const {
-    nombre,
-    apellido,
-    identificacion,
-    email,
-    username,
-    password,
-    status,
-  } = req.body;
+  const { email, username, password } = req.body;
 
   try {
-    const usuario = await Usuarios.findByPk(id, {
-      where: {
-        isDeleted: false, // Aseguramos que no se actualicen usuarios eliminados
-      },
-    });
-    if (!usuario) {
+    const usuario = await Usuarios.findByPk(id);
+
+    if (!usuario || usuario.isDeleted) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    // Si la contraseña se proporciona, encriptarla
-    let hashedPassword = usuario.password;
-    if (password) {
-      if (!validarPassword(password)) {
-        return res.status(400).json({ error: "Contraseña no válida" });
+    // Verificar si otro usuario ya tiene el email
+    if (email && email !== usuario.Mail) {
+      const emailExistente = await Usuarios.findOne({
+        where: { Mail: email },
+      });
+
+      if (emailExistente) {
+        return res.status(400).json({ error: "El correo ya está en uso." });
       }
+    }
+
+    // Verificar si otro usuario ya tiene el username
+    if (username && username !== usuario.UserName) {
+      const usernameExistente = await Usuarios.findOne({
+        where: { UserName: username },
+      });
+
+      if (usernameExistente) {
+        return res.status(400).json({ error: "El nombre de usuario ya está en uso." });
+      }
+    }
+
+    // Encriptar la nueva contraseña si se proporciona
+    let hashedPassword = usuario.Password;
+    if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
     }
 
+    // Actualizar los datos
     await usuario.update({
-      nombre,
-      apellido,
-      identificacion,
-      email,
-      username,
-      password: hashedPassword,
-      status,
+      Mail: email || usuario.Mail, 
+      UserName: username || usuario.UserName,
+      Password: hashedPassword,
     });
 
-    res.status(200).json(usuario);
+    res.status(200).json({ message: "Usuario actualizado correctamente", usuario });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
