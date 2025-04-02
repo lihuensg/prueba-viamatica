@@ -26,8 +26,11 @@ export const Persona = sequelize.define('Persona', {
     },
     isDeleted: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false  // Marca los registros como no eliminados por defecto
+        defaultValue: false
     }
 }, {
-    timestamps: false
+    timestamps: false,
+    freezeTableName: true, // Evita que Sequelize pluralice el nombre de la tabla
+    tableName: 'Personas'  // Especifica el nombre exacto de la tabla en PostgreSQL
 });
+
