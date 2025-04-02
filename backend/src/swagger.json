@@ -162,13 +162,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "nombre": {
-                  "example": "any"
-                },
-                "apellido": {
-                  "example": "any"
-                },
-                "identificacion": {
+                "Persona_idPersona2": {
                   "example": "any"
                 },
                 "password": {
@@ -184,6 +178,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"

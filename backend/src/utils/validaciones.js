@@ -8,13 +8,32 @@ export const generarCorreo = (nombre, apellido, identificacion) => {
   };
   
   export const validarUsername = (nombre, apellido) => {
-    return `${nombre[0]}${apellido}`; // Lógica de validación para username
+    // Convertir primera letra del nombre a mayúscula y apellido sin espacios
+    const primeraLetra = nombre[0].toUpperCase();
+    const apellidoLimpio = apellido.replace(/\s+/g, "").toLowerCase(); // Sin espacios
+  
+    // Generar número aleatorio de 2 dígitos para garantizar un número en el username
+    const numeroAleatorio = Math.floor(Math.random() * 90) + 10; // Entre 10 y 99
+  
+    // Unir las partes
+    let username = `${primeraLetra}${apellidoLimpio}${numeroAleatorio}`;
+  
+    // Asegurar que tiene entre 8 y 20 caracteres (cortar si es muy largo)
+    if (username.length < 8) {
+      username = username.padEnd(8, "x"); // Completar con "x" si es muy corto
+    } else if (username.length > 20) {
+      username = username.slice(0, 20); // Cortar si es muy largo
+    }
+  
+    return username;
   };
   
+
   export const validarPassword = (password) => {
-    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~\\-]).{8,}$/;
     return regex.test(password);
   };
+  
   
   export const validarIdentificacion = (identificacion) => {
     const identificacionRegex = /^[0-9]{10}$/; // Solo números y exactamente 10 caracteres
