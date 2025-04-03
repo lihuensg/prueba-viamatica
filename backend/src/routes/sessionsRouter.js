@@ -1,12 +1,16 @@
-import express from "express";
-import {
-  iniciarSesion,
-  cerrarSesion,
-} from "../controllers/sessionsController.js";
+import express from 'express';
+import { iniciarSesion, cerrarSesion, obtenerHistorialSesiones } from "../controllers/sessionsController.js";
+import { verificarToken } from "../utils/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/iniciar-sesion", iniciarSesion);
-router.post("/cerrar-sesion", cerrarSesion);
+// Rutas de autenticación
+router.post('/login', iniciarSesion);
+router.post('/logout', verificarToken, cerrarSesion); 
+router.get('/sesiones/:usuarioId', verificarToken, obtenerHistorialSesiones); // Solo admins
 
 export default router;
+
+
+
+
