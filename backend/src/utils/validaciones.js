@@ -1,37 +1,51 @@
 import { Sessions } from "../models/Sessions.js";
+import { Usuarios } from "../models/Usuarios.js"; 
 
-export const generarCorreo = (nombre, apellido, identificacion) => {
-  let correo = `${nombre[0].toLowerCase()}${apellido.toLowerCase()}${identificacion}@mail.com`;
-  // Lógica para evitar emails duplicados
-  return correo;
-};
+export const generarCorreo = async (nombre, apellido, identificacion) => {
+  let correoBase = `${nombre[0].toLowerCase()}${apellido.toLowerCase()}${identificacion}@mail.com`;
+  let correoUnico = correoBase;
+  let contador = 1;
 
-export const validarUsername = (nombre, apellido) => {
-  // Convertir primera letra del nombre a mayúscula y apellido sin espacios
-  const primeraLetra = nombre[0].toUpperCase();
-  const apellidoLimpio = apellido.replace(/\s+/g, "").toLowerCase(); // Sin espacios
-
-  // Generar número aleatorio de 2 dígitos para garantizar un número en el username
-  const numeroAleatorio = Math.floor(Math.random() * 90) + 10; // Entre 10 y 99
-
-  // Unir las partes
-  let username = `${primeraLetra}${apellidoLimpio}${numeroAleatorio}`;
-
-  // Asegurar que tiene entre 8 y 20 caracteres (cortar si es muy largo)
-  if (username.length < 8) {
-    username = username.padEnd(8, "x"); // Completar con "x" si es muy corto
-  } else if (username.length > 20) {
-    username = username.slice(0, 20); // Cortar si es muy largo
+  while (await Usuarios.findOne({ where: { Mail: correoUnico } })) {
+    correoUnico = `${correoBase.split("@")[0]}${contador}@mail.com`;
+    contador++;
   }
 
-  return username;
+  return correoUnico;
+};
+
+export const validarUsername = async (nombre, apellido) => {
+  const primeraLetra = nombre[0].toUpperCase();
+  const apellidoLimpio = apellido.replace(/\s+/g, "").toLowerCase();
+  const numeroAleatorio = Math.floor(Math.random() * 90) + 10;
+
+  let username = `${primeraLetra}${apellidoLimpio}${numeroAleatorio}`;
+  username = username.replace(/[^a-zA-Z0-9]/g, ""); 
+
+  if (username.length < 8) {
+    username = username.padEnd(8, "x");
+  } else if (username.length > 20) {
+    username = username.slice(0, 20);
+  }
+
+  let usernameUnico = username;
+  let contador = 1;
+  while (await Usuarios.findOne({ where: { UserName: usernameUnico } })) {
+    usernameUnico = `${username}${contador}`;
+    contador++;
+    if (usernameUnico.length > 20) {
+      usernameUnico = usernameUnico.slice(0, 20);
+    }
+  }
+
+  return usernameUnico;
 };
 
 export const validarPassword = (password) => {
-  const regex =
-    /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~\\-]).{8,}$/;
+  const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~\\-])[^\s]{8,}$/;
   return regex.test(password);
 };
+
 
 export const validarIdentificacion = (identificacion) => {
   // 1. Validar que sean exactamente 10 dígitos numéricos

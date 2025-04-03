@@ -11,53 +11,29 @@ export const crearUsuario = async (req, res) => {
   try {
     const { Persona_idPersona2, password } = req.body;
 
-    // Buscar la persona asociada
     const persona = await Persona.findByPk(Persona_idPersona2);
-
     if (!persona) {
-      return res
-        .status(404)
-        .json({ error: "No se encontró la persona asociada." });
+      return res.status(404).json({ error: "No se encontró la persona asociada." });
     }
 
-    // Generar correo basado en la persona
-    let correo = generarCorreo(
-      persona.Nombres,
-      persona.Apellidos,
-      persona.Identificacion
-    );
+    // Validar que la persona no tenga un usuario ya asociado
+    const correoUnico = await generarCorreo(persona.Nombres, persona.Apellidos, persona.Identificacion);
+    const username = await validarUsername(persona.Nombres, persona.Apellidos);
 
-    // Verificar si el correo ya existe y generar uno único
-    let contador = 1;
-    let correoUnico = correo;
-    while (await Usuarios.findOne({ where: { Mail: correoUnico } })) {
-      correoUnico = `${correo.split("@")[0]}${contador}@mail.com`;
-      contador++;
-    }
-
-    // Generar nombre de usuario
-    const username = validarUsername(persona.Nombres, persona.Apellidos);
-
-    // Validación de contraseña
     if (!validarPassword(password)) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Contraseña no válida. Debe contener al menos una mayúscula, un número y un carácter especial.",
-        });
+      return res.status(400).json({ 
+        error: "Contraseña no válida. Debe contener al menos 8 digitos. Debe contener al menos una mayúscula, un número y un carácter especial." 
+      });
     }
 
-    // Encriptar la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear usuario
     const usuario = await Usuarios.create({
-      Persona_idPersona2, // Relación con la persona
-      Identificacion: persona.Identificacion, // Se obtiene de la tabla Persona
+      Persona_idPersona2,
+      Identificacion: persona.Identificacion,
       Mail: correoUnico,
       UserName: username,
-      Password: hashedPassword, // Guardar la contraseña encriptada
+      Password: hashedPassword,
     });
 
     res.status(201).json(usuario);
