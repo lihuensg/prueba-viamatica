@@ -34,8 +34,19 @@ export const validarPassword = (password) => {
 };
 
 export const validarIdentificacion = (identificacion) => {
-  const identificacionRegex = /^[0-9]{10}$/; // Solo números y exactamente 10 caracteres
-  return identificacionRegex.test(identificacion);
+  // 1. Validar que sean exactamente 10 dígitos numéricos
+  const identificacionRegex = /^[0-9]{10}$/;
+  if (!identificacionRegex.test(identificacion)) {
+    return false;
+  }
+
+  // 2. Validar que no haya cuatro números seguidos repetidos
+  const repetidosRegex = /(.)\1{3,}/; // Busca cualquier carácter repetido 4 veces seguidas
+  if (repetidosRegex.test(identificacion)) {
+    return false;
+  }
+
+  return true;
 };
 
 export const validarFechaNacimiento = (fechaNacimiento) => {

@@ -8,17 +8,14 @@ export const crearPersona = async (req, res) => {
   try {
     const { Nombres, Apellidos, Identificacion, FechaNacimiento } = req.body;
 
-    // Validaciones
-    if (!validarIdentificacion || !validarFechaNacimiento) {
-      return res.status(500).json({ error: "Error en validaciones." });
-    }
-
+    // Validar identificación
     if (!validarIdentificacion(Identificacion)) {
-      return res
-        .status(400)
-        .json({ error: "Identificación no válida. Debe tener 10 caracteres." });
+      return res.status(400).json({
+        error: "Identificación no válida. Debe tener 10 dígitos, solo números y no contener cuatro números seguidos repetidos.",
+      });
     }
 
+    // Validar fecha de nacimiento
     if (!validarFechaNacimiento(FechaNacimiento)) {
       return res.status(400).json({ error: "Fecha de nacimiento no válida." });
     }
