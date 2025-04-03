@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
-import { Persona } from "./Persona.js"; // Importamos el modelo Persona
+import { Persona } from "./Persona.js";
 
 export const Usuarios = sequelize.define("Usuarios", {
   id: {
@@ -106,31 +106,30 @@ export const Usuarios = sequelize.define("Usuarios", {
   },
 });
 
-// Relación con Persona
-Usuarios.belongsTo(Persona, { foreignKey: "Persona_idPersona2" });
-
 // Generar correo automáticamente antes de crear el usuario
 Usuarios.beforeCreate(async (usuario) => {
-    if (!usuario.Mail) {
-      const persona = await Persona.findByPk(Number(usuario.Persona_idPersona2));
-  
-      console.log("Persona encontrada:", persona); // <-- Agrega esto
-  
-      if (!persona) {
-        throw new Error("No se encontró una persona con el ID proporcionado.");
-      }
-  
-      if (!persona.Nombres || !persona.Apellidos) {
-        throw new Error("La persona no tiene nombres o apellidos registrados.");
-      }
-  
-      const nombres = persona.Nombres.split(" ");
-      console.log("Nombres divididos:", nombres); // <-- Verifica esto
-  
-      const primeraLetra = nombres.length > 0 ? nombres[0][0].toLowerCase() : "";
-      const apellido = persona.Apellidos.split(" ")[0].toLowerCase();
-  
-      usuario.Mail = `${primeraLetra}${apellido}@mail.com`;
+  if (!usuario.Mail) {
+    const persona = await Persona.findByPk(Number(usuario.Persona_idPersona2));
+
+    console.log("Persona encontrada:", persona); // <-- Agrega esto
+
+    if (!persona) {
+      throw new Error("No se encontró una persona con el ID proporcionado.");
     }
-  });
-  
+
+    if (!persona.Nombres || !persona.Apellidos) {
+      throw new Error("La persona no tiene nombres o apellidos registrados.");
+    }
+
+    const nombres = persona.Nombres.split(" ");
+    console.log("Nombres divididos:", nombres); // <-- Verifica esto
+
+    const primeraLetra = nombres.length > 0 ? nombres[0][0].toLowerCase() : "";
+    const apellido = persona.Apellidos.split(" ")[0].toLowerCase();
+
+    usuario.Mail = `${primeraLetra}${apellido}@mail.com`;
+  }
+});
+
+Persona.hasMany(Usuarios, { foreignKey: "Persona_idPersona2" });
+Usuarios.belongsTo(Persona, { foreignKey: "Persona_idPersona2" });

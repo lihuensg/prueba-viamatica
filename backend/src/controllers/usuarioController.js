@@ -11,36 +11,50 @@ export const crearUsuario = async (req, res) => {
   try {
     const { Persona_idPersona2, password } = req.body;
 
+    // Buscar la persona por su ID
     const persona = await Persona.findByPk(Persona_idPersona2);
     if (!persona) {
       return res.status(404).json({ error: "No se encontró la persona asociada." });
     }
 
-    // Validar que la persona no tenga un usuario ya asociado
+    // Verificar si ya tiene un usuario activo
+    const usuarioActivo = await Usuarios.findOne({
+      where: { Persona_idPersona2, Status: "activo" }
+    });
+
+    if (usuarioActivo) {
+      return res.status(400).json({ error: "No se puede crear un nuevo usuario mientras exista uno activo." });
+    }
+
+    // Generar correo y username únicos
     const correoUnico = await generarCorreo(persona.Nombres, persona.Apellidos, persona.Identificacion);
     const username = await validarUsername(persona.Nombres, persona.Apellidos);
 
+    // Validar la contraseña
     if (!validarPassword(password)) {
-      return res.status(400).json({ 
-        error: "Contraseña no válida. Debe contener al menos 8 digitos. Debe contener al menos una mayúscula, un número y un carácter especial." 
-      });
+      return res.status(400).json({ error: "Contraseña no válida." });
     }
 
+    // Hashear la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Crear el usuario
     const usuario = await Usuarios.create({
       Persona_idPersona2,
-      Identificacion: persona.Identificacion,
+      Identificacion: persona.Identificacion,  // Puede repetirse ahora
       Mail: correoUnico,
       UserName: username,
       Password: hashedPassword,
+      Status: "activo", 
     });
 
     res.status(201).json(usuario);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Error interno del servidor", detalle: err.message });
   }
 };
+
+
 
 export const obtenerUsuarios = async (req, res) => {
   try {
@@ -127,20 +141,22 @@ export const actualizarUsuario = async (req, res) => {
 export const eliminarUsuario = async (req, res) => {
   const { id } = req.params;
   try {
-    const usuario = await Usuarios.findByPk(id, {
-      where: {
-        isDeleted: false, // Solo eliminamos usuarios activos
-      },
-    });
+    const usuario = await Usuarios.findByPk(id);
+
     if (!usuario) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    // Marcar el usuario como eliminado lógicamente
+    if (usuario.Status === "inactivo") {
+      return res.status(400).json({ error: "El usuario ya está inactivo." });
+    }
+
+    // Cambiar el estado a "inactivo" y marcar isDeleted como true
+    usuario.Status = "inactivo";
     usuario.isDeleted = true;
     await usuario.save();
 
-    res.status(200).json({ message: "Usuario eliminado correctamente" });
+    res.status(200).json({ message: "Usuario inactivo correctamente." });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
