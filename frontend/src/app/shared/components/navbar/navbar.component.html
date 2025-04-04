@@ -1,9 +1,0 @@
-<nav>
-    <ul>
-      <li *ngIf="isLoggedIn()"><a routerLink="/bienvenida">Inicio</a></li>
-      <li *ngIf="isAdmin()"><a routerLink="/dashboard">Dashboard</a></li>
-      <li *ngIf="isAdmin()"><a routerLink="/usuarios">Usuarios</a></li>
-      <li *ngIf="isLoggedIn()" (click)="logout()">Cerrar sesión</li>
-    </ul>
-  </nav>
-  
