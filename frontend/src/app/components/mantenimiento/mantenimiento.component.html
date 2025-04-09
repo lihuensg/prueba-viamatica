@@ -1,1 +1,18 @@
-<p>mantenimiento works!</p>
+<h2>Carga Masiva de Usuarios</h2>
+
+<input type="file" (change)="onArchivoSeleccionado($event)" accept=".xlsx, .csv">
+<button (click)="subirArchivo()">Subir Archivo</button>
+
+<div *ngIf="resultado">
+  <h3>Resultado</h3>
+  <p>Usuarios insertados: {{ resultado.insertados }}</p>
+
+  <div *ngIf="resultado.errores?.length > 0">
+    <h4>Errores:</h4>
+    <ul>
+      <li *ngFor="let error of resultado.errores">
+        Persona ID: {{ error.row.Persona_id }} - Error: {{ error.error }}
+      </li>
+    </ul>
+  </div>
+</div>

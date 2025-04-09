@@ -1,5 +1,5 @@
 import express from 'express';
-import { crearUsuario, obtenerUsuarios, obtenerUsuarioPorId, actualizarUsuario, eliminarUsuario } from '../controllers/usuarioController.js';
+import { crearUsuario, obtenerUsuarios, obtenerUsuarioPorId, actualizarUsuario, eliminarUsuario, cargaMasivaUsuarios } from '../controllers/usuarioController.js';
 
 const router = express.Router();
 
@@ -17,5 +17,7 @@ router.put('/:id', actualizarUsuario);
 
 // Ruta para eliminar un usuario lógicamente
 router.delete('/:id', eliminarUsuario);
+
+router.post('/carga-masiva', cargaMasivaUsuarios);
 
 export default router;

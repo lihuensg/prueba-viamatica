@@ -1,12 +1,10 @@
 import { Usuarios } from "../models/Usuarios.js";
 import { Persona } from "../models/Persona.js"; // Modelo de Persona
 import bcrypt from "bcrypt";
-import {
-  validarPassword,
-  generarCorreo,
-  validarUsername,
-} from "../utils/validaciones.js";
-
+import { validarPassword, generarCorreo, validarUsername } from "../utils/validaciones.js";
+import multer from 'multer';
+import * as XLSX from 'xlsx';
+import fs from 'fs';
 export const crearUsuario = async (req, res) => {
   try {
     const { Persona_idPersona2, password } = req.body;
@@ -160,3 +158,81 @@ export const eliminarUsuario = async (req, res) => {
   }
 };
 
+const upload = multer({ dest: 'uploads/' });
+
+export const cargaMasivaUsuarios = [
+  upload.single('archivo'),
+  async (req, res) => {
+    try {
+      const file = req.file;
+      if (!file) return res.status(400).json({ error: 'No se subió ningún archivo' });
+
+      const buffer = fs.readFileSync(req.file.path);
+      const workbook = XLSX.read(buffer, { type: 'buffer' });
+      const sheetName = workbook.SheetNames[0];
+      const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+      const resultados = {
+        insertados: 0,
+        errores: []
+      };
+
+      for (const row of data) {
+        try {
+          const personaId = row.Persona_id;
+          const password = row.Password;
+
+          if (!personaId || !password) {
+            resultados.errores.push({ row, error: 'Falta ID de persona o contraseña' });
+            continue;
+          }
+
+          const persona = await Persona.findByPk(personaId);
+          if (!persona) {
+            resultados.errores.push({ row, error: 'No se encontró la persona' });
+            continue;
+          }
+
+          const usuarioActivo = await Usuarios.findOne({
+            where: { Persona_idPersona2: personaId, Status: 'activo' }
+          });
+
+          if (usuarioActivo) {
+            resultados.errores.push({ row, error: 'Ya tiene usuario activo' });
+            continue;
+          }
+
+          if (!validarPassword(password)) {
+            resultados.errores.push({ row, error: 'Contraseña inválida' });
+            continue;
+          }
+
+          const correo = await generarCorreo(persona.Nombres, persona.Apellidos, persona.Identificacion);
+          const username = await validarUsername(persona.Nombres, persona.Apellidos);
+          const hashed = await bcrypt.hash(password, 10);
+
+          await Usuarios.create({
+            Persona_idPersona2: personaId,
+            Identificacion: persona.Identificacion,
+            Mail: correo,
+            UserName: username,
+            Password: hashed,
+            Status: 'activo'
+          });
+
+          resultados.insertados++;
+        } catch (error) {
+          resultados.errores.push({ row, error: 'Error interno' });
+        }
+      }
+
+      // eliminar archivo temporal
+      fs.unlinkSync(file.path);
+
+      res.status(200).json(resultados);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al procesar el archivo' });
+    }
+  }
+];
