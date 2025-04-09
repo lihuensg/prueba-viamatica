@@ -1,0 +1,18 @@
+<nav class="navbar">
+    <ul>
+      <li><a routerLink="/bienvenida">Bienvenida</a></li>
+  
+      <li *ngIf="isAdminUser">
+        <a routerLink="/dashboard">Dashboard</a>
+      </li>
+  
+      <li *ngIf="isAdminUser">
+        <a routerLink="/mantenimiento">Mantenimiento de Usuario</a>
+      </li>
+  
+      <li>
+        <a (click)="cerrarSesion()">Cerrar sesión</a>
+      </li>
+    </ul>
+  </nav>
+  

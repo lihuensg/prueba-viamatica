@@ -8,6 +8,7 @@ import rolUsuariosRoutes from "./routes/rolUsuariosRouter.js";
 import swaggerUI from "swagger-ui-express";
 import swaggerDocumentation from "./swagger.json" assert { type: "json" };
 import dotenv from 'dotenv';
+import cors from "cors";
 dotenv.config();
 
 console.log("JWT_SECRET desde app.js:", process.env.JWT_SECRET);
@@ -15,6 +16,10 @@ console.log("Ruta de ejecución:", process.cwd());
 
 
 const app = express();
+app.use(cors({
+    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    credentials: true
+  }));
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
 

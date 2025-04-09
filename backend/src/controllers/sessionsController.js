@@ -7,11 +7,11 @@ import { Sessions } from "../models/Sessions.js";
 
 export const iniciarSesion = async (req, res) => {
   try {
-    const { correo, username, password } = req.body;
+    const { mail, userName, password } = req.body;
 
     // Buscar usuario por correo o username
     const usuario = await Usuarios.findOne({
-      where: { [Op.or]: [{ Mail: correo }, { UserName: username }] },
+      where: { [Op.or]: [{ Mail: mail }, { UserName: userName }] },
       include: [{ model: Rol, as: "roles" }],
     });
 

@@ -6,12 +6,20 @@ import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { BienvenidaComponent } from './components/bienvenida/bienvenida.component';
+import { MantenimientoComponent } from './components/mantenimiento/mantenimiento.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    DashboardComponent,
+    NavbarComponent,
+    BienvenidaComponent,
+    MantenimientoComponent,
   ],
   imports: [
     BrowserModule,
