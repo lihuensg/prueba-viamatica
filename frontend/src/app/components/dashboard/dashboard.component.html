@@ -1,1 +1,23 @@
-<p>dashboard works!</p>
+<h2>Usuarios Activos</h2>
+<ul *ngIf="activos.length > 0; else noActivos">
+  <li *ngFor="let user of activos">
+    {{ user.nombre }} – Intentos fallidos: {{ user.intentosFallidos }}
+  </li>
+</ul>
+<ng-template #noActivos><p>No hay usuarios activos.</p></ng-template>
+
+<h2>Usuarios Inactivos</h2>
+<ul *ngIf="inactivos.length > 0; else noInactivos">
+  <li *ngFor="let user of inactivos">
+    {{ user.nombre }} – Intentos fallidos: {{ user.intentosFallidos }}
+  </li>
+</ul>
+<ng-template #noInactivos><p>No hay usuarios inactivos.</p></ng-template>
+
+<h2>Usuarios Bloqueados</h2>
+<ul *ngIf="bloqueados.length > 0; else noBloqueados">
+  <li *ngFor="let user of bloqueados">
+    {{ user.nombre }} – Intentos fallidos: {{ user.intentosFallidos }}
+  </li>
+</ul>
+<ng-template #noBloqueados><p>No hay usuarios bloqueados.</p></ng-template>

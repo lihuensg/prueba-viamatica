@@ -58,7 +58,7 @@ export class AuthService {
     });
   }
 
-  obtenerResumenBienvenida() {
+  obtenerResumenBienvenida(): Observable<any>  {
     const token = localStorage.getItem('token');
     
     const headers = new HttpHeaders({
@@ -66,5 +66,14 @@ export class AuthService {
     });
   
     return this.http.get(`${this.AppUrl}${this.APIUrl}/resumen`, { headers });
+  }
+
+  obtenerResumen(): Observable<any> {
+    const token = localStorage.getItem('token');
+    
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.get<any>(`${this.AppUrl}${this.APIUrl}/resumenDashboard`, { headers });
   }
 } 

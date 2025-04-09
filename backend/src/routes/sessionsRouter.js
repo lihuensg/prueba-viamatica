@@ -1,5 +1,5 @@
 import express from 'express';
-import { iniciarSesion, cerrarSesion, obtenerHistorialSesiones, obtenerResumenBienvenida} from "../controllers/sessionsController.js";
+import { iniciarSesion, cerrarSesion, obtenerResumenBienvenida, obtenerResumenDashboard} from "../controllers/sessionsController.js";
 import { verificarToken } from "../utils/authMiddleware.js";
 
 const router = express.Router();
@@ -7,9 +7,8 @@ const router = express.Router();
 // Rutas de autenticación
 router.post('/login', iniciarSesion);
 router.post('/logout', verificarToken, cerrarSesion); 
-router.get('/sesiones/:usuarioId', verificarToken, obtenerHistorialSesiones); // Solo admins
 router.get('/resumen', verificarToken, obtenerResumenBienvenida);
-
+router.get('/resumenDashboard', verificarToken, obtenerResumenDashboard); 
 
 export default router;
 

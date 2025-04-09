@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import { Usuarios } from "../models/Usuarios.js";
 import { Rol } from "../models/Rol.js";
 import { Sessions } from "../models/Sessions.js";
+import { sequelize } from "../database/database.js";
+
 
 export const iniciarSesion = async (req, res) => {
   try {
@@ -22,6 +24,29 @@ export const iniciarSesion = async (req, res) => {
       return res.status(403).json({ error: "Usuario bloqueado. Contacta al administrador." });
     }
 
+    // Verificar contraseña
+    const esCorrecta = await bcrypt.compare(password, usuario.Password);
+    if (!esCorrecta) {
+      usuario.intentosFallidos = (usuario.intentosFallidos || 0) + 1;
+      await usuario.save();
+
+      await Sessions.create({
+        FechaIngreso: new Date(),
+        FechaCierre: new Date(),
+        isDeleted: true,
+        Exitoso: false,
+        usuarios_idUsuario: usuario.id
+      });
+
+      if (usuario.intentosFallidos >= 3) {
+        usuario.Status = "bloqueado";
+        await usuario.save();
+        return res.status(403).json({ error: "Usuario bloqueado por 3 intentos fallidos" });
+      }
+
+      return res.status(400).json({ error: "Contraseña incorrecta" });
+    }
+
     // Verificar si ya hay una sesión activa
     const sessionActiva = await Sessions.findOne({
       where: { usuarios_idUsuario: usuario.id, isDeleted: false, FechaCierre: null },
@@ -29,27 +54,6 @@ export const iniciarSesion = async (req, res) => {
 
     if (sessionActiva) {
       return res.status(400).json({ error: "Ya tienes una sesión activa." });
-    }
-
-    // Verificar contraseña
-    const esCorrecta = await bcrypt.compare(password, usuario.Password);
-    if (!esCorrecta) {
-      usuario.intentosFallidos = (usuario.intentosFallidos || 0) + 1;
-      await usuario.save();
-    
-      await Sessions.create({
-        FechaIngreso: new Date(),
-        Exitoso: false,
-        usuarios_idUsuario: usuario.id
-      });
-    
-      if (usuario.intentosFallidos >= 3) {
-        usuario.Status = "bloqueado";
-        await usuario.save();
-        return res.status(403).json({ error: "Usuario bloqueado por 3 intentos fallidos" });
-      }
-    
-      return res.status(400).json({ error: "Contraseña incorrecta" });
     }
 
     // Resetear intentos fallidos
@@ -79,6 +83,7 @@ export const iniciarSesion = async (req, res) => {
   }
 };
 
+
 export const cerrarSesion = async (req, res) => {
   try {
     const { sessionId } = req.usuario;
@@ -105,41 +110,6 @@ export const cerrarSesion = async (req, res) => {
   }
 };
 
-// Función para obtener el historial de sesiones (solo admins)
-export const obtenerHistorialSesiones = async (req, res) => {
-  try {
-    const { usuarioId } = req.params;
-
-    // Verificar si el usuario autenticado tiene permisos de administrador
-    if (!req.usuario.rol.includes("admin")) {
-      return res.status(403).json({ error: "No tienes permisos para ver esta información." });
-    }
-
-    // Validar que el usuarioId sea válido
-    if (!usuarioId) {
-      return res.status(400).json({ error: "El ID del usuario es obligatorio." });
-    }
-
-    // Verificar si el usuario realmente existe
-    const usuarioExiste = await Usuarios.findByPk(usuarioId);
-    if (!usuarioExiste) {
-      return res.status(404).json({ error: "El usuario no existe." });
-    }
-
-    // Obtener el historial de sesiones
-    const sesiones = await Sessions.findAll({
-      where: { usuarios_idUsuario: usuarioId },
-      order: [["FechaIngreso", "DESC"]],
-      attributes: ["id", "FechaIngreso", "FechaCierre", "usuarios_idUsuario"]
-    });
-
-    res.status(200).json(sesiones);
-  } catch (err) {
-    console.error("Error al obtener el historial de sesiones:", err);
-    res.status(500).json({ error: "Error interno del servidor." });
-  }
-};
-
 export const obtenerResumenBienvenida = async (req, res) => {
   try {
     
@@ -155,7 +125,8 @@ export const obtenerResumenBienvenida = async (req, res) => {
     const ultimaSesion = await Sessions.findOne({
       where: {
         usuarios_idUsuario: usuarioId,
-        Exitoso: true
+        Exitoso: true,
+        FechaCierre: { [Op.not]: null } 
       },
       order: [["FechaIngreso", "DESC"]],
       attributes: ["FechaIngreso", "FechaCierre"]
@@ -186,3 +157,73 @@ export const obtenerResumenBienvenida = async (req, res) => {
   }
 };
 
+export const obtenerResumenDashboard = async (req, res) => {
+  try {
+    const usuarioId = req.usuario.idUsuario;
+    const roles = req.usuario.rol;
+
+    if (!roles.includes("admin")) {
+      return res.status(403).json({ error: "Acceso no autorizado" });
+    }
+
+    // 1. Obtener todos los usuarios
+    const usuarios = await Usuarios.findAll({
+      attributes: ["id", "UserName", "Status"]
+    });
+
+    // 2. Obtener todas las sesiones activas
+    const sesionesActivas = await Sessions.findAll({
+      where: { isDeleted: false, FechaCierre: null },
+      attributes: ["usuarios_idUsuario"],
+      group: ["usuarios_idUsuario"]
+    });
+
+    const idsActivos = sesionesActivas.map(s => s.usuarios_idUsuario);
+
+    // 3. Obtener intentos fallidos agrupados por usuario
+    const intentosFallidos = await Sessions.findAll({
+      where: { Exitoso: false },
+      attributes: [
+        "usuarios_idUsuario",
+        [sequelize.fn("COUNT", sequelize.col("id")), "cantidad"]
+      ],
+      group: ["usuarios_idUsuario"]
+    });
+
+    // Mapeamos los intentos fallidos por usuarioId
+    const intentosMap = {};
+    intentosFallidos.forEach(f => {
+      intentosMap[f.usuarios_idUsuario] = f.dataValues.cantidad;
+    });
+
+    // 4. Clasificamos usuarios según su estado + sesiones activas
+    const usuariosActivos = [];
+    const usuariosInactivos = [];
+    const usuariosBloqueados = [];
+
+    usuarios.forEach(u => {
+      const intentos = intentosMap[u.id] || 0;
+      const data = {
+        nombre: u.UserName,
+        intentosFallidos: intentos
+      };
+
+      if (u.Status === "bloqueado") {
+        usuariosBloqueados.push(data);
+      } else if (idsActivos.includes(u.id)) {
+        usuariosActivos.push(data);
+      } else {
+        usuariosInactivos.push(data);
+      }
+    });
+
+    res.status(200).json({
+      activos: usuariosActivos,
+      inactivos: usuariosInactivos,
+      bloqueados: usuariosBloqueados
+    });
+  } catch (err) {
+    console.error("Error en obtenerResumenDashboard:", err);
+    res.status(500).json({ error: "Error interno del servidor." });
+  }
+};
