@@ -13,7 +13,7 @@ export class NavbarComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.isAdminUser = this.authService.isAdmin();
+    this.isAdminUser = this.authService.isAdmin();                                                                                                                                                                                                                                                                                                                                                                                                                                                                
   }
 
   cerrarSesion() {

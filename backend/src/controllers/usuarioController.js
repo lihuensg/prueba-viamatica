@@ -54,8 +54,6 @@ export const crearUsuario = async (req, res) => {
   }
 };
 
-
-
 export const obtenerUsuarios = async (req, res) => {
   try {
     const usuarios = await Usuarios.findAll({
@@ -161,3 +159,4 @@ export const eliminarUsuario = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+

@@ -36,13 +36,19 @@ export const iniciarSesion = async (req, res) => {
     if (!esCorrecta) {
       usuario.intentosFallidos = (usuario.intentosFallidos || 0) + 1;
       await usuario.save();
-
+    
+      await Sessions.create({
+        FechaIngreso: new Date(),
+        Exitoso: false,
+        usuarios_idUsuario: usuario.id
+      });
+    
       if (usuario.intentosFallidos >= 3) {
         usuario.Status = "bloqueado";
         await usuario.save();
         return res.status(403).json({ error: "Usuario bloqueado por 3 intentos fallidos" });
       }
-
+    
       return res.status(400).json({ error: "Contraseña incorrecta" });
     }
 
@@ -133,3 +139,50 @@ export const obtenerHistorialSesiones = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor." });
   }
 };
+
+export const obtenerResumenBienvenida = async (req, res) => {
+  try {
+    
+    const usuarioId = req.usuario.idUsuario; // asumimos que el middleware de autenticación te mete esto
+    console.log("ID desde el token:", usuarioId);
+
+    const usuarioExiste = await Usuarios.findByPk(usuarioId);
+    if (!usuarioExiste) {
+      return res.status(404).json({ error: "Usuario no encontrado." });
+    }
+
+    // Última sesión exitosa
+    const ultimaSesion = await Sessions.findOne({
+      where: {
+        usuarios_idUsuario: usuarioId,
+        Exitoso: true
+      },
+      order: [["FechaIngreso", "DESC"]],
+      attributes: ["FechaIngreso", "FechaCierre"]
+    });
+
+    // Últimos 5 intentos fallidos
+    const intentosFallidos = await Sessions.findAll({
+      where: {
+        usuarios_idUsuario: usuarioId,
+        Exitoso: false
+      },
+      order: [["FechaIngreso", "DESC"]],
+      limit: 5,
+      attributes: ["FechaIngreso"]
+    });
+
+    res.status(200).json({
+      usuario: {
+        nombre: usuarioExiste.UserName,
+        email: usuarioExiste.Mail
+      },
+      ultimaSesion,
+      intentosFallidos
+    });
+  } catch (error) {
+    console.error("Error en obtenerResumenBienvenida:", error);
+    res.status(500).json({ error: "Error interno del servidor." });
+  }
+};
+

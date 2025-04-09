@@ -3,7 +3,7 @@ import { sequelize } from "./database/database.js";
 
 async function main() {
   try {
-      await sequelize.sync({ force: false }); // Usa `force: true` solo si quieres recrear las tablas
+      await sequelize.sync({ force: false}); // Usa `force: true` solo si quieres recrear las tablas
       app.listen(3000, () => {
           console.log("Servidor corriendo en el puerto 3000");
       });
