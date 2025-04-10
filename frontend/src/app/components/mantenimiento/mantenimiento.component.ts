@@ -28,4 +28,8 @@ export class MantenimientoComponent {
       }
     });
   }
+
+  get esAdmin(): boolean {
+    return this.usuarioService.isAdmin();
+  }
 }

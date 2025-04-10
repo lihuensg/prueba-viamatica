@@ -61,7 +61,7 @@ export const obtenerPersonaPorId = async (req, res) => {
   }
 };
 
-export const actualizarPersona = async (req, res) => {
+/*export const actualizarPersona = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ error: "ID inválido" });
@@ -95,7 +95,7 @@ export const actualizarPersona = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor", detalle: err.message });
   }
 };
-
+*/
 
 export const eliminarPersona = async (req, res) => {
   try {
@@ -119,3 +119,71 @@ export const eliminarPersona = async (req, res) => {
   }
 };
 
+export const actualizarPersona = async (req, res) => {
+  const { id } = req.params; // idPersona que se quiere actualizar
+  const datosActualizados = req.body;
+  const { idUsuario, rol } = req.user; // del token decodificado
+
+  try {
+    // Buscar la persona a modificar
+    const persona = await Persona.findByPk(id);
+    if (!persona) {
+      return res.status(404).json({ error: "Persona no encontrada" });
+    }
+
+    // Buscar el usuario actual (logueado)
+    const usuarioLogueado = await Usuarios.findByPk(idUsuario);
+
+    // Buscar usuario relacionado con la persona que se quiere modificar
+    const usuarioDeLaPersona = await Usuarios.findOne({
+      where: { Persona_idPersona2: id }
+    });
+
+    // Obtener roles del usuario de la persona
+    const rolesRelacionados = await usuarioDeLaPersona?.getRoles({
+      where: { isDeleted: false }
+    });
+    const rolesRelacionadosNombres = rolesRelacionados?.map(r => r.RolName) || [];
+
+    const esAdmin = rol.includes("ADMIN");
+
+    // Si NO es admin, solo puede editar su propia persona
+    if (!esAdmin) {
+      if (usuarioDeLaPersona?.idUsuario !== idUsuario) {
+        return res.status(403).json({ error: "No puedes modificar a otra persona." });
+      }
+
+      // Campos que puede modificar un usuario común
+      const camposPermitidos = ["Nombres", "Apellidos", "FechaNacimiento"];
+      const camposNoPermitidos = Object.keys(datosActualizados).filter(
+        campo => !camposPermitidos.includes(campo)
+      );
+
+      if (camposNoPermitidos.length > 0) {
+        return res.status(400).json({
+          error: `No puedes modificar los campos: ${camposNoPermitidos.join(", ")}`
+        });
+      }
+    } else {
+      // Si es admin, NO puede editar a otro admin
+      if (
+        usuarioDeLaPersona &&
+        usuarioDeLaPersona.idUsuario !== idUsuario &&
+        rolesRelacionadosNombres.includes("ADMIN")
+      ) {
+        return res.status(403).json({ error: "No puedes modificar a otro administrador." });
+      }
+
+      // Podés permitir que el admin edite todos los campos excepto el ID
+      delete datosActualizados.idPersona;
+    }
+
+    // Todo OK, actualizar
+    await persona.update(datosActualizados);
+    res.status(200).json({ message: "Persona actualizada correctamente", persona });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al actualizar la persona", detalle: error.message });
+  }
+};

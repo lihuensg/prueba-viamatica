@@ -31,5 +31,5 @@ export const Persona = sequelize.define('Persona', {
 }, {
     timestamps: false,
     freezeTableName: true, // Evita que Sequelize pluralice el nombre de la tabla
-    tableName: 'Personas'  // Especifica el nombre exacto de la tabla en PostgreSQL
+    tableName: 'Personas'  // Nombre de la tabla en la base de datos
 });
