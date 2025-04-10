@@ -11,6 +11,7 @@ export class MantenimientoComponent implements OnInit {
   resultado: any = null;
   personas: any[] = [];
   personaSeleccionada: any = null;
+  estadosUsuarios: any[] = [];
 
   mensajeActualizacion: string | null = null;
   mensajeTipo: 'success' | 'error' | null = null;
@@ -19,6 +20,7 @@ export class MantenimientoComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarPersonas();
+    this.obtenerEstadosUsuarios();
   }
    // Método para cargar las personas, dependiendo si el usuario es admin o no
    cargarPersonas(): void {
@@ -110,6 +112,39 @@ export class MantenimientoComponent implements OnInit {
       error: (err) => {
         console.error('Error al actualizar la persona:', err);
         this.mensajeActualizacion = 'Error al actualizar los datos';
+        this.mensajeTipo = 'error';
+      }
+    });
+  }
+
+   // Método para obtener los estados de los usuarios
+   obtenerEstadosUsuarios(): void {
+    this.usuarioService.obtenerEstadoUsuarios().subscribe({
+      next: (data) => {
+        console.log('Estados de usuarios:', data);  // Verifica los datos aquí
+        this.estadosUsuarios = data;  // Aquí se almacenan los estados de los usuarios
+      },
+      error: (err) => {
+        console.error('Error al obtener estados de los usuarios:', err);
+      }
+    });
+  }
+
+  // Método para actualizar el estado de un usuario
+  actualizarEstado(idUsuario: string, estado: string): void {
+    this.usuarioService.actualizarEstado(idUsuario, estado).subscribe({
+      next: () => {
+        this.mensajeActualizacion = 'Estado actualizado correctamente';
+        this.mensajeTipo = 'success';
+        this.obtenerEstadosUsuarios();  // Recargar los estados de los usuarios
+        setTimeout(() => {
+          this.mensajeActualizacion = null;
+          this.mensajeTipo = null;
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('Error al actualizar el estado del usuario:', err);
+        this.mensajeActualizacion = 'Error al actualizar el estado';
         this.mensajeTipo = 'error';
       }
     });

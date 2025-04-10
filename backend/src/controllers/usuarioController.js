@@ -236,3 +236,44 @@ export const cargaMasivaUsuarios = [
     }
   }
 ];
+
+export const obtenerUsuariosEstado = async (req, res) => {
+  try {
+    const usuarios = await Usuarios.findAll({
+      where: {
+        isDeleted: false, // Filtramos los usuarios eliminados lógicamente
+      },
+      attributes: ['id', 'UserName', 'Status'], // Solo obtenemos los campos necesarios
+    });
+    res.status(200).json(usuarios);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const actualizarEstado = async (req, res) => {
+  const { id } = req.params;
+  const { newStatus } = req.body; // El nuevo estado que se desea establecer
+
+  try {
+    // Verificar si el usuario existe
+    const usuario = await Usuarios.findByPk(id);
+
+    if (!usuario || usuario.isDeleted) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    // Verificar si el estado nuevo es válido (uno de los valores posibles)
+    if (!['activo', 'bloqueado', 'inactivo'].includes(newStatus)) {
+      return res.status(400).json({ error: "Estado no válido" });
+    }
+
+    // Actualizar el estado del usuario
+    usuario.Status = newStatus;
+    await usuario.save();
+
+    res.status(200).json({ message: "Estado actualizado correctamente", usuario });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

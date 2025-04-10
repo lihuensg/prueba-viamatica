@@ -54,3 +54,27 @@
     <button type="submit" class="btn btn-primary">Actualizar</button>
   </form>
 </div>
+
+
+<div *ngIf="esAdmin">
+  <h2>Gestión de Estados de Usuarios</h2>
+
+  <!-- Lista de usuarios y sus estados -->
+  <ul>
+    <li *ngFor="let usuario of estadosUsuarios">
+      <span>{{ usuario.UserName }} - Estado: {{ usuario.Status}}</span>
+
+      <!-- Solo admins pueden actualizar el estado -->
+      <select [(ngModel)]="usuario.estado" (change)="actualizarEstado(usuario.id, usuario.estado)">
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+        <option value="bloqueado">Bloqueado</option>
+      </select>
+    </li>
+  </ul>
+
+  <!-- Mensajes de éxito o error al actualizar -->
+  <div *ngIf="mensajeActualizacion" [ngClass]="{'alert': true, 'alert-success': mensajeTipo === 'success', 'alert-danger': mensajeTipo === 'error'}">
+    {{ mensajeActualizacion }}
+  </div>
+</div>
