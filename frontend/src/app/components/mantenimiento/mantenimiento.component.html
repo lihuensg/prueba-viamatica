@@ -1,22 +1,56 @@
 <h1>Mantenimiento</h1>
 
+<!-- Sección: Admin - carga masiva -->
 <div *ngIf="esAdmin">
-<h2>Carga Masiva de Usuarios</h2>
+  <h2>Carga Masiva de Usuarios</h2>
 
-<input type="file" (change)="onArchivoSeleccionado($event)" accept=".xlsx, .csv">
-<button (click)="subirArchivo()">Subir Archivo</button>
+  <input type="file" (change)="onArchivoSeleccionado($event)" accept=".xlsx, .csv">
+  <button (click)="subirArchivo()">Subir Archivo</button>
 
-<div *ngIf="resultado">
-  <h3>Resultado</h3>
-  <p>Usuarios insertados: {{ resultado.insertados }}</p>
+  <div *ngIf="resultado">
+    <h3>Resultado</h3>
+    <p>Usuarios insertados: {{ resultado.insertados }}</p>
 
-  <div *ngIf="resultado.errores?.length > 0">
-    <h4>Errores:</h4>
-    <ul>
-      <li *ngFor="let error of resultado.errores">
-        Persona ID: {{ error.row.Persona_id }} - Error: {{ error.error }}
-      </li>
-    </ul>
+    <div *ngIf="resultado.errores?.length > 0">
+      <h4>Errores:</h4>
+      <ul>
+        <li *ngFor="let error of resultado.errores">
+          Persona ID: {{ error.row.Persona_id }} - Error: {{ error.error }}
+        </li>
+      </ul>
+    </div>
   </div>
+
+  <!-- Lista para seleccionar persona -->
+  <h2>Editar Usuarios</h2>
+  <ul>
+    <li *ngFor="let persona of personas" (click)="seleccionarPersona(persona)">
+      {{ persona.nombres }} {{ persona.apellidos }}
+    </li>
+  </ul>
 </div>
+
+<!-- Sección de edición para admin o usuario normal -->
+<div *ngIf="personaSeleccionada">
+  <h3>Editar Datos</h3>
+
+  <div *ngIf="mensajeActualizacion" [ngClass]="{'alert': true, 'alert-success': mensajeTipo === 'success', 'alert-danger': mensajeTipo === 'error'}">
+    {{ mensajeActualizacion }}
+  </div>
+
+  <form (ngSubmit)="actualizarPersona()">
+    <label>Nombres:</label>
+    <input type="text" [(ngModel)]="personaSeleccionada.Nombres" name="nombres" class="form-control"><br>
+
+    <label>Apellidos:</label>
+    <input type="text" [(ngModel)]="personaSeleccionada.Apellidos" name="apellidos" class="form-control"><br>
+
+    <label>Identificación:</label>
+    <input type="text" [(ngModel)]="personaSeleccionada.Identificacion" name="identificacion" class="form-control"><br>
+
+    <label>Fecha de Nacimiento:</label>
+    <input type="date" [(ngModel)]="personaSeleccionada.FechaNacimiento" name="fechaNacimiento" class="form-control"><br>
+
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+  </form>
 </div>

@@ -1,4 +1,4 @@
-import { FormsModule } from '@angular/forms';
+
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { NgModule } from '@angular/core';
@@ -10,6 +10,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { BienvenidaComponent } from './components/bienvenida/bienvenida.component';
 import { MantenimientoComponent } from './components/mantenimiento/mantenimiento.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -26,7 +27,9 @@ import { MantenimientoComponent } from './components/mantenimiento/mantenimiento
     FormsModule,      
     HttpClientModule,
     RouterModule,
-    AppRoutingModule    
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule 
   ],
   bootstrap: [AppComponent]
 })

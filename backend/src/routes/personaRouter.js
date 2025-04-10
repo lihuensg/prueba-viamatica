@@ -1,21 +1,36 @@
 import express from 'express';
-import { crearPersona, obtenerPersonas, obtenerPersonaPorId, actualizarPersona, eliminarPersona } from '../controllers/personaController.js';
+import {
+  crearPersona,
+  obtenerPersonas,
+  obtenerPersonaPorId,
+  eliminarPersona,
+  obtenerPersonasNoAdmin,
+  actualizarPersona,
+  obtenerPersonaPorUsuarioId
+} from '../controllers/personaController.js';
+import { verificarToken } from "../utils/authMiddleware.js";
 
 const router = express.Router();
 
-// Ruta para crear una persona
+// Crear una persona
 router.post('/crear', crearPersona);
 
-// Ruta para obtener todas las personas
+// Obtener todas las personas
 router.get('/', obtenerPersonas);
 
-// Ruta para obtener una persona por ID
+// Obtener personas que no son admin
+router.get('/no-admin', obtenerPersonasNoAdmin);
+
+// Obtener persona por ID de usuario (más específico)
+router.get('/por-usuario/:idUsuario', obtenerPersonaPorUsuarioId);
+
+// Obtener una persona por ID de persona
 router.get('/:id', obtenerPersonaPorId);
 
-// Ruta para actualizar una persona
+// Actualizar persona
 router.put('/:id', actualizarPersona);
 
-// Ruta para eliminar una persona lógicamente
+// Eliminar persona lógicamente
 router.delete('/:id', eliminarPersona);
 
 export default router;
