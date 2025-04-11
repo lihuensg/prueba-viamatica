@@ -17,7 +17,9 @@ export const iniciarSesion = async (req, res) => {
       include: [{ model: Rol, as: "roles" }],
     });
 
-    if (!usuario) return res.status(404).json({ error: "Usuario no encontrado" });
+    if (!usuario) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
 
     // Verificar si el usuario está bloqueado
     if (usuario.Status === "bloqueado") {
@@ -26,63 +28,88 @@ export const iniciarSesion = async (req, res) => {
 
     // Verificar contraseña
     const esCorrecta = await bcrypt.compare(password, usuario.Password);
-    if (!esCorrecta) {
-      usuario.intentosFallidos = (usuario.intentosFallidos || 0) + 1;
-      await usuario.save();
 
+    if (!esCorrecta) {
+      // Contar intentos fallidos en los últimos intentos (opcional: filtrar por fecha si querés)
+      const intentosFallidos = await Sessions.count({
+        where: {
+          usuarios_idUsuario: usuario.id,
+          Exitoso: false,
+        },
+      });
+
+      const nuevoIntento = intentosFallidos + 1;
+
+      // Registrar intento fallido
       await Sessions.create({
         FechaIngreso: new Date(),
         FechaCierre: new Date(),
         isDeleted: true,
         Exitoso: false,
-        usuarios_idUsuario: usuario.id
+        usuarios_idUsuario: usuario.id,
       });
 
-      if (usuario.intentosFallidos >= 3) {
+      if (nuevoIntento >= 3) {
         usuario.Status = "bloqueado";
         await usuario.save();
+
         return res.status(403).json({ error: "Usuario bloqueado por 3 intentos fallidos" });
       }
 
-      return res.status(400).json({ error: "Contraseña incorrecta" });
+      const intentosRestantes = 3 - nuevoIntento;
+
+      return res.status(400).json({
+        error: "Contraseña incorrecta",
+        intentosRestantes,
+      });
     }
 
     // Verificar si ya hay una sesión activa
     const sessionActiva = await Sessions.findOne({
-      where: { usuarios_idUsuario: usuario.id, isDeleted: false, FechaCierre: null },
+      where: {
+        usuarios_idUsuario: usuario.id,
+        isDeleted: false,
+        FechaCierre: null,
+      },
     });
 
     if (sessionActiva) {
       return res.status(400).json({ error: "Ya tienes una sesión activa." });
     }
 
-    // Resetear intentos fallidos
-    usuario.intentosFallidos = 0;
-    await usuario.save();
-
-    // Crear sesión
+    // Crear sesión exitosa
     const session = await Sessions.create({
       FechaIngreso: new Date(),
       usuarios_idUsuario: usuario.id,
+      Exitoso: true,
+      isDeleted: false,
     });
 
-    // Obtener roles del usuario
     const rolesUsuario = usuario.roles.map((r) => r.RolName);
 
-    // Generar token con datos del usuario
+    // Generar token
     const token = jwt.sign(
-      { idUsuario: usuario.id, sessionId: session.id, rol: rolesUsuario },
+      {
+        idUsuario: usuario.id,
+        sessionId: session.id,
+        rol: rolesUsuario,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "2h" }
     );
 
-    res.status(200).json({ message: "Inicio de sesión exitoso", token, sessionId: session.id });
+    res.status(200).json({
+      message: "Inicio de sesión exitoso",
+      token,
+      sessionId: session.id,
+    });
+
   } catch (err) {
+    console.error("🔥 Error en iniciarSesion:", err.message);
     console.error(err);
     res.status(500).json({ error: "Error en el servidor" });
   }
 };
-
 
 export const cerrarSesion = async (req, res) => {
   try {
