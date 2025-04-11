@@ -24,10 +24,15 @@
   <!-- Lista para seleccionar persona -->
   <h2>Editar Usuarios</h2>
   <ul>
-    <li *ngFor="let persona of personas" (click)="seleccionarPersona(persona)">
+    <li 
+      *ngFor="let persona of personas" 
+      (click)="seleccionarPersona(persona)"
+      [ngClass]="{'seleccionada': persona === personaSeleccionada}"
+      style="cursor: pointer;">
       {{ persona.nombres }} {{ persona.apellidos }}
     </li>
   </ul>
+  
 </div>
 
 <!-- Sección de edición para admin o usuario normal -->
@@ -76,5 +81,28 @@
   <!-- Mensajes de éxito o error al actualizar -->
   <div *ngIf="mensajeActualizacion" [ngClass]="{'alert': true, 'alert-success': mensajeTipo === 'success', 'alert-danger': mensajeTipo === 'error'}">
     {{ mensajeActualizacion }}
+  </div>
+</div>
+
+<div *ngIf="esAdmin">
+  <h2>Buscar Personas</h2>
+
+  <!-- Campos de búsqueda -->
+  <input [(ngModel)]="nombre" placeholder="Nombre" />
+  <input [(ngModel)]="apellido" placeholder="Apellido" />
+  <button (click)="buscarPersonas()">Buscar</button>
+
+  <!-- Mostrar los resultados -->
+  <div *ngIf="personasBusqueda.length > 0">
+    <ul>
+      <li *ngFor="let persona of personasBusqueda">
+        {{ persona.Nombres }} {{ persona.Apellidos }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Mensaje si no hay resultados o error -->
+  <div *ngIf="mensajeBusqueda">
+    <p>{{ mensajeBusqueda }}</p>
   </div>
 </div>

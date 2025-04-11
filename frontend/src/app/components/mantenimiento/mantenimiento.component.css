@@ -1,0 +1,8 @@
+.seleccionada {
+    background-color: #d1ecf1; /* azul clarito */
+    color: #0c5460;
+    font-weight: bold;
+    padding: 5px;
+    border-left: 4px solid #0c5460;
+    border-radius: 4px;
+  }

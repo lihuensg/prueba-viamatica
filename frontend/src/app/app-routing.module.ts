@@ -6,11 +6,12 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { BienvenidaComponent } from './components/bienvenida/bienvenida.component';
 import { MantenimientoComponent } from './components/mantenimiento/mantenimiento.component';
 import { AuthGuard } from './guards/auth.guard';
+import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'mantenimiento', component: MantenimientoComponent},
+  { path: 'mantenimiento', component: MantenimientoComponent, canActivate: [LoginGuard]},
   { path: 'navbar', component: NavbarComponent },
   { path: 'bienvenida', component: BienvenidaComponent},
   { path: '', redirectTo: 'login', pathMatch: 'full' },

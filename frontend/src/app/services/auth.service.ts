@@ -76,4 +76,9 @@ export class AuthService {
     });
     return this.http.get<any>(`${this.AppUrl}${this.APIUrl}/resumenDashboard`, { headers });
   }
-} 
+  
+  estaLogueado(): boolean {
+    return !!localStorage.getItem('token'); 
+  }
+
+}

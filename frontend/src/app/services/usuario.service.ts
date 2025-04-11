@@ -75,6 +75,14 @@ export class UsuarioService {
   actualizarEstado(id: string, newStatus: string): Observable<any> {
     return this.http.put(`http://localhost:3000/usuario/estado/${id}`, { newStatus });
   }
+
+  buscarPersonas(nombre: string, apellido: string): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Realiza la solicitud GET al backend
+    return this.http.get<any[]>(`${this.AppUrl}persona/buscar?nombre=${nombre}&apellido=${apellido}`, { headers });
+  }
 }
 
 

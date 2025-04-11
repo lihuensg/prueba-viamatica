@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+    
   crearUsuario,
   obtenerUsuarios,
   obtenerUsuarioPorId,
@@ -7,7 +8,7 @@ import {
   eliminarUsuario,
   cargaMasivaUsuarios,
   obtenerUsuariosEstado, 
-  actualizarEstado,        
+  actualizarEstado,      
 } from '../controllers/usuarioController.js';
 
 const router = express.Router();

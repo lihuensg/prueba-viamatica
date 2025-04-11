@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -12,6 +12,10 @@ export class MantenimientoComponent implements OnInit {
   personas: any[] = [];
   personaSeleccionada: any = null;
   estadosUsuarios: any[] = [];
+  mensajeBusqueda: string = '';
+  personasBusqueda: any[] = [];
+  nombre: string = '';
+  apellido: string = '';  
 
   mensajeActualizacion: string | null = null;
   mensajeTipo: 'success' | 'error' | null = null;
@@ -70,8 +74,18 @@ export class MantenimientoComponent implements OnInit {
     });
   }
 
+  @ViewChild('formularioPersona') formularioPersona!: ElementRef;
+
   seleccionarPersona(persona: any) {
-    this.personaSeleccionada = { ...persona };
+    this.personaSeleccionada = persona;
+
+    // Limpiar mensaje si se selecciona otra persona
+    this.mensajeActualizacion = '';
+
+    // Scroll al formulario
+    setTimeout(() => {
+      this.formularioPersona?.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }, 0);
   }
 
   actualizarPersona() {
@@ -100,13 +114,13 @@ export class MantenimientoComponent implements OnInit {
         this.mensajeActualizacion = 'Datos actualizados correctamente';
         this.mensajeTipo = 'success';
   
-        // Volver a cargar la lista de personas
-        this.cargarPersonas();  // Esto asegura que la lista de personas se actualice después de la actualización
+        this.cargarPersonas();  // Recarga la lista
   
-        // Resetear mensajes de actualización después de 3 segundos
+        // Ocultar el formulario y resetear la persona seleccionada después de un tiempo
         setTimeout(() => {
           this.mensajeActualizacion = null;
           this.mensajeTipo = null;
+          this.personaSeleccionada = null; // 👈 esto oculta el formulario
         }, 3000);
       },
       error: (err) => {
@@ -116,6 +130,7 @@ export class MantenimientoComponent implements OnInit {
       }
     });
   }
+  
 
    // Método para obtener los estados de los usuarios
    obtenerEstadosUsuarios(): void {
@@ -149,4 +164,23 @@ export class MantenimientoComponent implements OnInit {
       }
     });
   }
-}  
+
+  buscarPersonas(): void {
+    this.usuarioService.buscarPersonas(this.nombre, this.apellido).subscribe(
+      (response: any) => {
+        if (Array.isArray(response) && response.length > 0) {
+          this.personasBusqueda = response;
+          this.mensajeBusqueda = '';
+        } else {
+          this.personasBusqueda = [];
+          this.mensajeBusqueda = 'No se encontraron personas.';
+        }
+      },
+      (error) => {
+        this.personasBusqueda = [];
+        this.mensajeBusqueda = 'Ocurrió un error al buscar personas.';
+        console.error('Error al buscar personas:', error);
+      }
+    );
+  }
+}

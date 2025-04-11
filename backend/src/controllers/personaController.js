@@ -191,3 +191,27 @@ import { Rol } from "../models/Rol.js";
     }
   };
   
+  export const buscarPersonas = async (req, res) => {
+    const { nombre, apellido } = req.query;
+  
+    try {
+      const whereConditions = {};
+  
+      if (nombre) {
+        whereConditions.Nombres = { [Op.eq]: nombre };
+      }
+  
+      if (apellido) {
+        whereConditions.Apellidos = { [Op.like]: apellido };
+      }
+  
+      const personas = await Persona.findAll({
+        where: whereConditions,
+      });
+  
+      // Siempre responder 200, incluso si no hay resultados
+      return res.status(200).json(personas);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };

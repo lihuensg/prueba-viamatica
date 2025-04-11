@@ -6,11 +6,17 @@ import {
   eliminarPersona,
   obtenerPersonasNoAdmin,
   actualizarPersona,
-  obtenerPersonaPorUsuarioId
+  obtenerPersonaPorUsuarioId,
+  buscarPersonas
+  
 } from '../controllers/personaController.js';
 import { verificarToken } from "../utils/authMiddleware.js";
 
 const router = express.Router();
+
+
+
+router.get('/buscar', buscarPersonas);
 
 // Crear una persona
 router.post('/crear', crearPersona);
