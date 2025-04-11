@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "d48e3540-b2c3-4634-8089-c2fa55e8f426",
-		"name": "API RESTful",
+		"_postman_id": "81ebf8eb-bdbb-4598-9a93-526b45731834",
+		"name": "API RESTful Viamatica",
 		"description": "Documentación de la API RESTful",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "24095637"
@@ -10,6 +10,106 @@
 		{
 			"name": "persona",
 			"item": [
+				{
+					"name": "buscar",
+					"item": [
+						{
+							"name": "/persona/buscar",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/persona/buscar?nombre=<string>&apellido=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"persona",
+										"buscar"
+									],
+									"query": [
+										{
+											"key": "nombre",
+											"value": "<string>"
+										},
+										{
+											"key": "apellido",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/persona/buscar?nombre=<string>&apellido=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"persona",
+												"buscar"
+											],
+											"query": [
+												{
+													"key": "nombre",
+													"value": "<string>"
+												},
+												{
+													"key": "apellido",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/persona/buscar?nombre=<string>&apellido=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"persona",
+												"buscar"
+											],
+											"query": [
+												{
+													"key": "nombre",
+													"value": "<string>"
+												},
+												{
+													"key": "apellido",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
 				{
 					"name": "crear",
 					"item": [
@@ -158,6 +258,229 @@
 									"header": [],
 									"cookie": [],
 									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "no-admin",
+					"item": [
+						{
+							"name": "/persona/no-admin",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/persona/no-admin",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"persona",
+										"no-admin"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/persona/no-admin",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"persona",
+												"no-admin"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/persona/no-admin",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"persona",
+												"no-admin"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "por-usuario",
+					"item": [
+						{
+							"name": "{idUsuario}",
+							"item": [
+								{
+									"name": "/persona/por-usuario/:idUsuario",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/persona/por-usuario/:idUsuario",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"persona",
+												"por-usuario",
+												":idUsuario"
+											],
+											"variable": [
+												{
+													"key": "idUsuario",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/persona/por-usuario/:idUsuario",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"persona",
+														"por-usuario",
+														":idUsuario"
+													],
+													"variable": [
+														{
+															"key": "idUsuario"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Bad Request",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/persona/por-usuario/:idUsuario",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"persona",
+														"por-usuario",
+														":idUsuario"
+													],
+													"variable": [
+														{
+															"key": "idUsuario"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Not Found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/persona/por-usuario/:idUsuario",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"persona",
+														"por-usuario",
+														":idUsuario"
+													],
+													"variable": [
+														{
+															"key": "idUsuario"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Internal Server Error",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/persona/por-usuario/:idUsuario",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"persona",
+														"por-usuario",
+														":idUsuario"
+													],
+													"variable": [
+														{
+															"key": "idUsuario"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
 								}
 							]
 						}
@@ -728,6 +1051,392 @@
 			"name": "usuario",
 			"item": [
 				{
+					"name": "estado",
+					"item": [
+						{
+							"name": "{id}",
+							"item": [
+								{
+									"name": "/usuario/estado/:id",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"newStatus\": {\n    \"example\": \"any\"\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/usuario/estado/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuario",
+												"estado",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"newStatus\": {\n    \"example\": \"any\"\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/usuario/estado/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"usuario",
+														"estado",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Bad Request",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"newStatus\": {\n    \"example\": \"any\"\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/usuario/estado/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"usuario",
+														"estado",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Not Found",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"newStatus\": {\n    \"example\": \"any\"\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/usuario/estado/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"usuario",
+														"estado",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Internal Server Error",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"newStatus\": {\n    \"example\": \"any\"\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/usuario/estado/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"usuario",
+														"estado",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "/usuario/estado",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuario/estado",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuario",
+										"estado"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuario/estado",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuario",
+												"estado"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuario/estado",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuario",
+												"estado"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "carga-masiva",
+					"item": [
+						{
+							"name": "/usuario/carga-masiva",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuario/carga-masiva",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuario",
+										"carga-masiva"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuario/carga-masiva",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuario",
+												"carga-masiva"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuario/carga-masiva",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuario",
+												"carga-masiva"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuario/carga-masiva",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuario",
+												"carga-masiva"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
 					"name": "crear",
 					"item": [
 						{
@@ -1291,6 +2000,34 @@
 									},
 									"status": "OK",
 									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/usuario/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"usuario",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
 									"_postman_previewlanguage": "text",
 									"header": [],
 									"cookie": [],
@@ -2720,7 +3457,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"correo\": {\n    \"example\": \"any\"\n  },\n  \"username\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
+									"raw": "{\n  \"mail\": {\n    \"example\": \"any\"\n  },\n  \"userName\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -2752,7 +3489,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"correo\": {\n    \"example\": \"any\"\n  },\n  \"username\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
+											"raw": "{\n  \"mail\": {\n    \"example\": \"any\"\n  },\n  \"userName\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -2790,7 +3527,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"correo\": {\n    \"example\": \"any\"\n  },\n  \"username\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
+											"raw": "{\n  \"mail\": {\n    \"example\": \"any\"\n  },\n  \"userName\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -2828,7 +3565,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"correo\": {\n    \"example\": \"any\"\n  },\n  \"username\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
+											"raw": "{\n  \"mail\": {\n    \"example\": \"any\"\n  },\n  \"userName\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -2866,7 +3603,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"correo\": {\n    \"example\": \"any\"\n  },\n  \"username\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
+											"raw": "{\n  \"mail\": {\n    \"example\": \"any\"\n  },\n  \"userName\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -2904,7 +3641,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"correo\": {\n    \"example\": \"any\"\n  },\n  \"username\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
+											"raw": "{\n  \"mail\": {\n    \"example\": \"any\"\n  },\n  \"userName\": {\n    \"example\": \"any\"\n  },\n  \"password\": {\n    \"example\": \"any\"\n  }\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -3074,211 +3811,232 @@
 					]
 				},
 				{
-					"name": "sesiones",
+					"name": "resumen",
 					"item": [
 						{
-							"name": "{usuarioId}",
-							"item": [
+							"name": "/session/resumen",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/session/resumen",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"session",
+										"resumen"
+									]
+								}
+							},
+							"response": [
 								{
-									"name": "/session/sesiones/:usuarioId",
-									"request": {
+									"name": "OK",
+									"originalRequest": {
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{baseUrl}}/session/sesiones/:usuarioId",
+											"raw": "{{baseUrl}}/session/resumen",
 											"host": [
 												"{{baseUrl}}"
 											],
 											"path": [
 												"session",
-												"sesiones",
-												":usuarioId"
-											],
-											"variable": [
-												{
-													"key": "usuarioId",
-													"value": "<string>",
-													"description": "(Required) "
-												}
+												"resumen"
 											]
 										}
 									},
-									"response": [
-										{
-											"name": "OK",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{baseUrl}}/session/sesiones/:usuarioId",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"session",
-														"sesiones",
-														":usuarioId"
-													],
-													"variable": [
-														{
-															"key": "usuarioId"
-														}
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Bad Request",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{baseUrl}}/session/sesiones/:usuarioId",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"session",
-														"sesiones",
-														":usuarioId"
-													],
-													"variable": [
-														{
-															"key": "usuarioId"
-														}
-													]
-												}
-											},
-											"status": "Bad Request",
-											"code": 400,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Unauthorized",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{baseUrl}}/session/sesiones/:usuarioId",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"session",
-														"sesiones",
-														":usuarioId"
-													],
-													"variable": [
-														{
-															"key": "usuarioId"
-														}
-													]
-												}
-											},
-											"status": "Unauthorized",
-											"code": 401,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Forbidden",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{baseUrl}}/session/sesiones/:usuarioId",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"session",
-														"sesiones",
-														":usuarioId"
-													],
-													"variable": [
-														{
-															"key": "usuarioId"
-														}
-													]
-												}
-											},
-											"status": "Forbidden",
-											"code": 403,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Not Found",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{baseUrl}}/session/sesiones/:usuarioId",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"session",
-														"sesiones",
-														":usuarioId"
-													],
-													"variable": [
-														{
-															"key": "usuarioId"
-														}
-													]
-												}
-											},
-											"status": "Not Found",
-											"code": 404,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Internal Server Error",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{baseUrl}}/session/sesiones/:usuarioId",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"session",
-														"sesiones",
-														":usuarioId"
-													],
-													"variable": [
-														{
-															"key": "usuarioId"
-														}
-													]
-												}
-											},
-											"status": "Internal Server Error",
-											"code": 500,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Unauthorized",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/session/resumen",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"session",
+												"resumen"
+											]
 										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Not Found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/session/resumen",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"session",
+												"resumen"
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/session/resumen",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"session",
+												"resumen"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "resumenDashboard",
+					"item": [
+						{
+							"name": "/session/resumenDashboard",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/session/resumenDashboard",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"session",
+										"resumenDashboard"
 									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/session/resumenDashboard",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"session",
+												"resumenDashboard"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Unauthorized",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/session/resumenDashboard",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"session",
+												"resumenDashboard"
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Forbidden",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/session/resumenDashboard",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"session",
+												"resumenDashboard"
+											]
+										}
+									},
+									"status": "Forbidden",
+									"code": 403,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/session/resumenDashboard",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"session",
+												"resumenDashboard"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
 								}
 							]
 						}
@@ -3908,6 +4666,348 @@
 													"body": ""
 												}
 											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "solicitar-cambio-password",
+					"item": [
+						{
+							"name": "/auth/solicitar-cambio-password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": {\n    \"example\": \"any\"\n  }\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/solicitar-cambio-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"solicitar-cambio-password"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": {\n    \"example\": \"any\"\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/solicitar-cambio-password",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"solicitar-cambio-password"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Not Found",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": {\n    \"example\": \"any\"\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/solicitar-cambio-password",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"solicitar-cambio-password"
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": {\n    \"example\": \"any\"\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/solicitar-cambio-password",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"solicitar-cambio-password"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "resetear-password",
+					"item": [
+						{
+							"name": "{token}",
+							"item": [
+								{
+									"name": "/auth/resetear-password/:token",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"nuevaContrasena\": {\n    \"example\": \"any\"\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/auth/resetear-password/:token",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"auth",
+												"resetear-password",
+												":token"
+											],
+											"variable": [
+												{
+													"key": "token",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"nuevaContrasena\": {\n    \"example\": \"any\"\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/auth/resetear-password/:token",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"auth",
+														"resetear-password",
+														":token"
+													],
+													"variable": [
+														{
+															"key": "token"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Bad Request",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"nuevaContrasena\": {\n    \"example\": \"any\"\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/auth/resetear-password/:token",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"auth",
+														"resetear-password",
+														":token"
+													],
+													"variable": [
+														{
+															"key": "token"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Internal Server Error",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"nuevaContrasena\": {\n    \"example\": \"any\"\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/auth/resetear-password/:token",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"auth",
+														"resetear-password",
+														":token"
+													],
+													"variable": [
+														{
+															"key": "token"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
 										}
 									]
 								}
