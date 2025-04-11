@@ -1,16 +1,41 @@
 <h2>Login</h2>
 
-<div>
+<!-- FORMULARIO DE LOGIN -->
+<div *ngIf="!token">
   <label>Email:</label>
   <input type="mail" [(ngModel)]="mail" name="mail" required>
   
   <label>Nombre Usuario:</label>
-  <input type="userName" [(ngModel)]="userName" name="userName" required>
+  <input type="text" [(ngModel)]="userName" name="userName" required>
 
   <label>Contraseña:</label>
   <input type="password" [(ngModel)]="password" name="password" required>
 
   <button (click)="logIn()" type="button">Iniciar sesión</button>
+
+  <!-- Botón para solicitar reset -->
+  <p style="margin-top: 10px;">
+    <a href="#" (click)="mostrarReset = true; $event.preventDefault()">¿Olvidaste tu contraseña?</a>
+  </p>
+
+  <!-- Formulario para solicitar el reset -->
+  <div *ngIf="mostrarReset">
+    <h3>Restablecer contraseña</h3>
+    <label>Email:</label>
+    <input type="mail" [(ngModel)]="email" name="resetEmail" required>
+    <button (click)="solicitarReset()" type="button">Enviar correo</button>
+  </div>
 </div>
- 
+
+<!-- FORMULARIO DE NUEVA CONTRASEÑA (cuando hay token en la URL) -->
+<div *ngIf="token">
+  <h3>Ingresá una nueva contraseña</h3>
+  <label>Nueva contraseña:</label>
+  <input type="password" [(ngModel)]="nuevaContrasena" name="nuevaContrasena" required>
+  <button (click)="enviarNuevaContrasena()" type="button">Guardar</button>
+</div>
+
+<!-- MENSAJE -->
+<p *ngIf="mensaje">{{ mensaje }}</p>
+
 

@@ -5,6 +5,7 @@ import rolOpcionesRoutes from "./routes/rolOpcionesRouter.js";
 import rolRoutes from "./routes/rolRouter.js";
 import sessionsRouter from "./routes/sessionsRouter.js";
 import rolUsuariosRoutes from "./routes/rolUsuariosRouter.js";
+import authRoutes from "./routes/authRoutes.js";
 import swaggerUI from "swagger-ui-express";
 import swaggerDocumentation from "./swagger.json" assert { type: "json" };
 import dotenv from 'dotenv';
@@ -32,6 +33,6 @@ app.use("/rol-opciones", rolOpcionesRoutes);
 app.use("/rol", rolRoutes);
 app.use("/session", sessionsRouter);
 app.use("/rol-usuarios", rolUsuariosRoutes);
-
+app.use("/auth", authRoutes);
 
 export default app;

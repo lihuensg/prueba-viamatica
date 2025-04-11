@@ -10,7 +10,9 @@ export class AppComponent {
   constructor(public router: Router) {}
 
   mostrarNavbar(): boolean {
-    return this.router.url !== '/login';
+    const urlSinQuery = this.router.url.split('?')[0];
+    return !(urlSinQuery.startsWith('/login') || urlSinQuery.startsWith('/reset-password'));
   }
+  
 }
 

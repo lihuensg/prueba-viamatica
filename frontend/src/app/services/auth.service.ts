@@ -81,4 +81,11 @@ export class AuthService {
     return !!localStorage.getItem('token'); 
   }
 
+  solicitarResetPassword(email: string) {
+    return this.http.post(`${this.AppUrl}auth/solicitar-cambio-password`, { email });
+  }
+
+  resetearPassword(token: string, nuevaContrasena: string) {
+    return this.http.post(`${this.AppUrl}auth/resetear-password/${token}`, { nuevaContrasena });
+  }
 }

@@ -104,6 +104,16 @@ export const Usuarios = sequelize.define("Usuarios", {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  resetToken: {
+    type: DataTypes.STRING,
+    field: "resettoken",
+    allowNull: true,
+  },
+  resetTokenExpiration: {
+    type: DataTypes.DATE,
+    field: "resettokenexpiration",
+    allowNull: true,
+  },
 });
 
 // Generar correo automáticamente antes de crear el usuario
@@ -131,5 +141,5 @@ Usuarios.beforeCreate(async (usuario) => {
   }
 });
 
-Persona.hasMany(Usuarios, { foreignKey: "Persona_idPersona2"  });
+Persona.hasMany(Usuarios, { foreignKey: "Persona_idPersona2" });
 Usuarios.belongsTo(Persona, { foreignKey: "Persona_idPersona2" });

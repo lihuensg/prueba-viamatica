@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { AuthService } from 'src/app/services/auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +13,15 @@ export class LoginComponent {
     userName: string = ''
     mail: string = ''
     password: string = ''
+    mostrarReset = false;
+    email = '';
+    nuevaContrasena = '';
+    mensaje = '';
+    token = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
+    this.token = this.route.snapshot.paramMap.get('token') || '';
+  }
 
   logIn() {
     if (this.mail == '' || this.userName == '' ||  this.password == '') {
@@ -42,4 +50,33 @@ export class LoginComponent {
       }
     });
   }
+
+  solicitarReset() {
+    this.authService.solicitarResetPassword(this.email).subscribe({
+      next: () => this.mensaje = 'Revisa tu correo para restablecer tu contraseña',
+      error: err => {
+        console.error(err);
+        this.mensaje = 'Error al enviar solicitud';
+      }
+    });
+  }
+
+  enviarNuevaContrasena() {
+    if (!this.token) {
+      this.mensaje = 'Token inválido o ausente';
+      return;
+    }
+  
+    this.authService.resetearPassword(this.token, this.nuevaContrasena).subscribe({
+      next: () => {
+        // Redirige al login con el query param ?reset=ok
+        this.router.navigate(['/login'], { queryParams: { reset: 'ok' } });
+      },  
+      error: err => {
+        console.error(err);
+        this.mensaje = err.error?.error || 'Error al restablecer contraseña';
+      }
+    });
+  }
+  
 }
