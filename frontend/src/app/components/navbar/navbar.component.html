@@ -1,18 +1,21 @@
 <nav class="navbar">
-    <ul>
+  <ul>
+    <div class="nav-left">
       <li><a routerLink="/bienvenida">Bienvenida</a></li>
-  
+
       <li *ngIf="isAdminUser">
         <a routerLink="/dashboard">Dashboard</a>
       </li>
-  
+
       <li>
         <a routerLink="/mantenimiento">Mantenimiento de Usuario</a>
       </li>
-  
+    </div>
+
+    <div class="nav-right">
       <li>
-        <a (click)="cerrarSesion()">Cerrar sesión</a>
+        <button class="logout-btn" (click)="cerrarSesion()">Cerrar sesión</button>
       </li>
-    </ul>
-  </nav>
-  
+    </div>
+  </ul>
+</nav>

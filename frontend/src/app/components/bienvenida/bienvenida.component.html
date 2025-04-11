@@ -1,20 +1,26 @@
 <div class="card p-4 shadow rounded">
-    <h2>Bienvenido/a, {{ usuario?.nombre }}</h2>
-    <p>Correo: {{ usuario?.email }}</p>
-  
-    <div *ngIf="ultimaSesion">
-      <h4>Última sesión exitosa:</h4>
-      <p>Ingreso: {{ ultimaSesion.FechaIngreso | date:'short' }}</p>
-      <p>Cierre: {{ ultimaSesion.FechaCierre ? (ultimaSesion.FechaCierre | date:'short') : 'Sesión aún activa' }}</p>
-    </div>
-  
-    <div *ngIf="intentosFallidos.length > 0">
-      <h4>Últimos intentos fallidos:</h4>
-      <ul>
-        <li *ngFor="let intento of intentosFallidos">
-          {{ intento.FechaIngreso | date:'short' }}
-        </li>
-      </ul>
-    </div>
+  <h2>Bienvenido/a, {{ usuario?.nombre }}</h2>
+  <p>{{ usuario?.email }}</p>
+
+  <div *ngIf="ultimaSesion">
+    <h4>Última sesión exitosa:</h4>
+    <p>Ingreso: {{ ultimaSesion.FechaIngreso | date : "short" }}</p>
+    <p>
+      Cierre:
+      {{
+        ultimaSesion.FechaCierre
+          ? (ultimaSesion.FechaCierre | date : "short")
+          : "Sesión aún activa"
+      }}
+    </p>
   </div>
-  
+
+  <div *ngIf="intentosFallidos.length > 0">
+    <h4>Últimos intentos fallidos:</h4>
+    <ul>
+      <li *ngFor="let intento of intentosFallidos">
+        {{ intento.FechaIngreso | date : "short" }}
+      </li>
+    </ul>
+  </div>
+</div>

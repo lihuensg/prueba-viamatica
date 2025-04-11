@@ -1,24 +1,53 @@
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-  
-  .card {
-    background: #f5f5f5;
-    border-radius: 8px;
-    padding: 1.2rem;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  
-  .card h3 {
-    margin-bottom: 0.5rem;
-  }
-  
-  .card.activo { border-left: 6px solid #4caf50; }
-  .card.inactivo { border-left: 6px solid #2196f3; }
-  .card.bloqueado { border-left: 6px solid #f44336; }
-  .card.intentos { border-left: 6px solid #ff9800; }
-  
+.dashboard-usuarios {
+  display: flex;
+  gap: 20px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
+}
+
+.seccion-usuarios {
+  flex: 1 1 300px;
+  background-color: #fdfdfd;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+}
+
+.seccion-usuarios:hover {
+  transform: translateY(-3px);
+}
+
+.seccion-usuarios h2 {
+  color: #333;
+  border-bottom: 2px solid #0077cc;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.seccion-usuarios ul {
+  list-style: none;
+  padding: 0;
+}
+
+.seccion-usuarios li {
+  padding: 10px 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.seccion-usuarios li:last-child {
+  border-bottom: none;
+}
+
+.seccion-usuarios li::before {
+  content: '👤 ';
+}
+
+.seccion-usuarios p {
+  color: #888;
+  font-style: italic;
+  margin-top: 10px;
+}
