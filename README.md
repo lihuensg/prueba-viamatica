@@ -24,6 +24,6 @@ Este proyecto es una aplicación web desarrollada con **Angular** para el fronte
 PORT=3000
 DB_NAME=postgres
 DB_USER=postgres
-DB_PASSWORD=patita123
+DB_PASSWORD=-
 DB_HOST=localhost
-JWT_SECRET=9c845582fc622ba507bc511da8dcf8c10058589a440679f3324367f184cebb616fba204674ef25135dd54baccae4945ea12f6723ffffcabea5e7690264cd2596
+JWT_SECRET=-
